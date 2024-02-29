@@ -1,0 +1,67 @@
+stages:
+  preprocessing:
+    cmd: python scripts/data_preprocessing.py
+    deps:
+    - scripts/data_preprocessing.py
+    - data/source/All_Beauty_5.json
+    - data/source/AMAZON_FASHION_5.json
+    - data/source/Appliances_5.json
+    - data/source/Software_5.json
+    outs:
+    - data/preprocessed data/Amazon.json
+
+  split:
+    cmd: python scripts/data_split.py
+    deps:
+    - scripts/data_split.py
+    - data/preprocessed data/Amazon.json
+    params:
+    - split_and_vocab.test_size
+    - split_and_vocab.random_state
+    - split_and_vocab.stratification
+    outs:
+    - data/split/Amazon_test.json
+    - data/split/Amazon_train.json
+
+  featurize:
+    cmd: python scripts/feature_extraction.py
+    deps:
+    - scripts/feature_extraction.py
+    - data/split/Amazon_test.json
+    - data/split/Amazon_train.json
+    outs:
+    - data/features/Amazon_test.json
+    - data/features/Amazon_train.json
+
+  train:
+    cmd: python scripts/train_model.py
+    deps:
+    - scripts/train_model.py
+    - data/features/Amazon_test.json
+    - data/features/Amazon_train.json
+    - data/word2vec-google-news-300/word2vec-google-news-300.gz
+    params:
+    - train.strategy
+    - train.method
+    - train.used_data
+    - train.feature_selection
+    - train.feature_number
+    - train.experiment
+    - train.hypparamselec
+    - train.bow_feature_num
+    - train.text_encode_method
+    outs:
+    - clf.joblib
+    metrics:
+    - results.json:
+        cache: false
+
+  # analysis:
+  #   cmd: jupyter nbconvert --output-dir './data' --output 'notebook_exec' --to notebook --execute notebook.ipynb
+  #   deps:
+  #   - notebook.ipynb
+  #   # - data/features/Amazon_test.json
+  #   # - data/features/Amazon_train.json
+  #   outs:
+  #   - data/notebook_exec.ipynb:
+  #       cache: false

@@ -1,0 +1,6 @@
+requests
+beautifulsoup4
+argparse
+lxml
+pyyaml
+selenium

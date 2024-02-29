@@ -1,0 +1,5 @@
+outs:
+- md5: cfee19822e3e70e3ce470b7efb259451
+  size: 16260932
+  path: Software_5.json
+  isexec: true

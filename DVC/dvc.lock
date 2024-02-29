@@ -1,0 +1,134 @@
+schema: '2.0'
+stages:
+  preprocessing:
+    cmd: python scripts/data_preprocessing.py
+    deps:
+    - path: data/source/AMAZON_FASHION_5.json
+      md5: 5a1d8f483aa34695256379050d42a2b7
+      size: 1413469
+    - path: data/source/All_Beauty_5.json
+      md5: 9a2c4fe7fc647b620560e0ca8dd14d81
+      size: 2457643
+    - path: data/source/Appliances_5.json
+      md5: 724a6ff48f926319166a6bfe6511d4f8
+      size: 4232371
+    - path: data/source/Software_5.json
+      md5: cfee19822e3e70e3ce470b7efb259451
+      size: 16260932
+    - path: scripts/data_preprocessing.py
+      md5: 717db3197bee7191ecbd9e3b3036f2c7
+      size: 1836
+    outs:
+    - path: data/preprocessed data/Amazon.json
+      md5: 72a62055d34c4b6955cdec0aaf78e561
+      size: 19362217
+  split:
+    cmd: python scripts/data_split.py
+    deps:
+    - path: data/preprocessed data/Amazon.json
+      md5: 72a62055d34c4b6955cdec0aaf78e561
+      size: 19362217
+    - path: scripts/data_split.py
+      md5: a3fae99c851e704a8c309be2e9964acf
+      size: 828
+    params:
+      params.yaml:
+        split_and_vocab.random_state: 42
+        split_and_vocab.stratification: true
+        split_and_vocab.test_size: 0.33
+    outs:
+    - path: data/split/Amazon_test.json
+      md5: 663915a44f622cbe948d9d5e45d05a65
+      size: 6412377
+    - path: data/split/Amazon_train.json
+      md5: f342704843e4d3f0a4be4aa5dbb861a6
+      size: 12950171
+  featurize:
+    cmd: python scripts/feature_extraction.py
+    deps:
+    - path: data/split/Amazon_test.json
+      md5: 663915a44f622cbe948d9d5e45d05a65
+      size: 6412377
+    - path: data/split/Amazon_train.json
+      md5: f342704843e4d3f0a4be4aa5dbb861a6
+      size: 12950171
+    - path: scripts/feature_extraction.py
+      md5: 8121239704ac28590e81a6448c04748c
+      size: 3830
+    outs:
+    - path: data/features/Amazon_test.json
+      md5: e8ce7f071288d5685a0cb26c8dee878e
+      size: 4369982
+    - path: data/features/Amazon_train.json
+      md5: 89deda6c6a724a815a9efbb80266e2fe
+      size: 8850002
+  train:
+    cmd: python scripts/train_model.py
+    deps:
+    - path: data/features/Amazon_test.json
+      md5: e8ce7f071288d5685a0cb26c8dee878e
+      size: 4369982
+    - path: data/features/Amazon_train.json
+      md5: 89deda6c6a724a815a9efbb80266e2fe
+      size: 8850002
+    - path: data/word2vec-google-news-300/word2vec-google-news-300.gz
+      md5: a5e5354d40acb95f9ec66d5977d140ef
+      size: 1743563840
+    - path: scripts/train_model.py
+      md5: 400c74e6ee0b4db91e4fa8ac00703faa
+      size: 8839
+    params:
+      params.yaml:
+        train.bow_feature_num: 300
+        train.experiment: none
+        train.feature_number: 100
+        train.feature_selection: none
+        train.hypparamselec: halvinggridsearch
+        train.method: random_forest
+        train.strategy: most_frequent
+        train.text_encode_method: bow
+        train.used_data: all
+    outs:
+    - path: clf.joblib
+      md5: 98d80adc5680b200541ac47c71d1a21e
+      size: 63620247
+    - path: results.json
+      md5: 52bea9f7d08ec521f262c74b72c76729
+      size: 68
+  analysis:
+    cmd: jupyter nbconvert --output-dir './data' --output 'notebook_exec' --to notebook
+      --execute notebook.ipynb
+    deps:
+    - path: notebook.ipynb
+      md5: cf79db19f81377e4196a7bbea738a0f2
+      size: 21819
+    outs:
+    - path: data/notebook_exec.ipynb
+      md5: 63e72fc92d90eb9e4666f093754c98df
+      size: 94033
+  split_and_vocab:
+    cmd: python scripts/data_split_and_vocab.py
+    deps:
+    - path: data/preprocessed data/Amazon.json
+      md5: 72a62055d34c4b6955cdec0aaf78e561
+      size: 19362217
+    - path: scripts/data_split_and_vocab.py
+      md5: 9cb1dde714faf7cc2371d6e9cbecca76
+      size: 1626
+    params:
+      params.yaml:
+        global.text_encode_method: bow
+        split_and_vocab.bow_feature_num: 300
+        split_and_vocab.random_state: 42
+        split_and_vocab.stratification: true
+        split_and_vocab.test_size: 0.33
+    outs:
+    - path: data/split/Amazon_test.json
+      md5: 663915a44f622cbe948d9d5e45d05a65
+      size: 6412377
+    - path: data/split/Amazon_train.json
+      md5: f342704843e4d3f0a4be4aa5dbb861a6
+      size: 12950171
+    - path: data/vocab.json
+      md5: c67c10bcc62a12af7a6c4044fb5bbf7e
+      size: 6967

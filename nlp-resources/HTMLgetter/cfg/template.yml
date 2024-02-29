@@ -1,0 +1,32 @@
+name: ''                                        # name of the destination folder in output
+
+sitemaps: ['./sitemaps/name_sitemap.xml']       # string or list of strings with paths to sitemap xmls
+
+template: null                                  # if set to string will download only those links, which contain
+                                                # the template string
+                                                # f.e. with template='blog'
+                                                # foo.com/blog will be downloaded, while 
+                                                # foo.com/post will not
+
+run_analysis: True                              # If true prints sitemap analysis and quits the script
+                                                # If false downloading sequence begins
+
+sample_size: 5                                  # Number of links to show for run_analysis
+
+folderExists: False                             # If true throws exception if destination folder already exists
+
+shuffle: True                                   # Randomizes the order in which links are downloaded
+
+overwrite: False                                # If false won't download links that already were downloaded
+
+rpm: 150                                        # Target Requests per Minute
+
+limit: 5                                        # Number of links to download, if null downloads all links
+
+javascript_generated: True                      # If true changes the download method so it can download
+                                                # JavaScript generated web pages
+
+javascript_wait_time: 4                         # Time to wait for JavaScript to execute 
+
+show_sleep: False                               # Prints the time of artificial delay
+

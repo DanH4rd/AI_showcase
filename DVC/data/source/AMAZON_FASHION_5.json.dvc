@@ -1,0 +1,5 @@
+outs:
+- md5: 5a1d8f483aa34695256379050d42a2b7
+  size: 1413469
+  path: AMAZON_FASHION_5.json
+  isexec: true

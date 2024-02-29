@@ -1,0 +1,5 @@
+outs:
+- md5: 724a6ff48f926319166a6bfe6511d4f8
+  size: 4232371
+  path: Appliances_5.json
+  isexec: true

@@ -1,0 +1,18 @@
+split_and_vocab:
+  test_size: 0.33
+  random_state: 42
+  stratification: true
+
+train:
+  strategy: most_frequent
+  method: random_forest
+  used_data: all
+
+  feature_selection: none
+  feature_number: 100
+
+  experiment: none
+  hypparamselec: halvinggridsearch
+
+  bow_feature_num: 300
+  text_encode_method: bow

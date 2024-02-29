@@ -1,0 +1,27 @@
+name: 'AniaGotuje'                              # name of the destination folder in output
+
+sitemaps: './sitemaps/ania_gotuje_sitemap.xml'   # path to the sitemap xml
+
+run_analysis: False                              # If true prints sitemap analysis and quits the script
+                                                # If false downloading sequence begins
+
+sample_size: 5                                  # Number of links to show for run_analysis
+
+folderExists: False                             # If true throws exception if destination folder already exists
+
+shuffle: True                                   # Randomizes the order in which links are downloaded
+
+overwrite: False                                # If false won't download links that already were downloaded
+
+rpm: 150                                        # Target Requests per Minute
+
+limit: null                                        # Number of links to download, if null downloads all links
+
+show_sleep: False                               # Prints the time of artificial delay
+
+javascript_generated: True                      # If true changes the download method so it can download
+                                                # JavaScript generated web pages
+
+show_sleep: False                               # Prints the time of artificial delay
+
+threads_num: 10
